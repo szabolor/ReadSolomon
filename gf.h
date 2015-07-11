@@ -12,10 +12,10 @@ struct GF_PARAMS {
 };
 typedef struct GF_PARAMS GF_PARAMS;
 
-uint16_t GF_init(GF_PARAMS* params);
-uint16_t GF_precompute_tables(GF_PARAMS* params);
-uint16_t GFadd(uint16_t x, uint16_t y);
-uint16_t GFmul(uint16_t x, uint16_t y, uint16_t n);
-
+void GF_init(GF_PARAMS* params);
+void GF_precompute_tables(GF_PARAMS* params);
+void GF_free(GF_PARAMS* params);
+uint16_t GF_add(uint16_t x, uint16_t y);
+uint16_t GF_mul(uint16_t x, uint16_t y, GF_PARAMS* params);
 
 #endif /* GF_H */

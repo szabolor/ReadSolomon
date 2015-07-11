@@ -23,7 +23,7 @@ uint16_t GF_get_generator_for_m(uint16_t m) {
   }
 }
 
-uint16_t GF_init(GF_PARAMS* params) {
+void GF_init(GF_PARAMS* params) {
   if (params->t == 0) {
     debug("Wrong GF_PARAMS data: Zero for 't' (symbol correction number)\n t=2 will be used by default");
     params->t = 2;
@@ -44,7 +44,7 @@ uint16_t GF_init(GF_PARAMS* params) {
   GF_precompute_tables(params);
 }
 
-uint16_t GF_precompute_tables(GF_PARAMS* params) {
+void GF_precompute_tables(GF_PARAMS* params) {
   uint16_t i;
 
   //debug("n: %d", params->n);
@@ -67,10 +67,17 @@ uint16_t GF_precompute_tables(GF_PARAMS* params) {
   for (i = 0; i < params->n; ++i) {
     params->alpha_by_num[params->num_by_alpha[i] - 1] = i;
   }
+}
 
-  printf("a^x - value:\n");
-  for (i = 0; i < params->n; ++i) {
-    printf("%3d - %3d\n", i, params->num_by_alpha[i]);
+void GF_free(GF_PARAMS* params) {
+  if (params) {
+    if (params->num_by_alpha) {
+      free(params->num_by_alpha);
+    }
+    if (params->alpha_by_num) {
+      free(params->alpha_by_num);
+    }  
+    free(params);
   }
 }
 
@@ -84,7 +91,7 @@ uint16_t GF_mul(uint16_t x, uint16_t y, GF_PARAMS* params) {
   if (!(x && y)) {
     return 0;
   }
-  num = params->alpha_by_num[x] + params->alpha_by_num[y];
+  num = params->alpha_by_num[x - 1] + params->alpha_by_num[y - 1];
   if (num > params->n) {
     num -= params->n;
   }
