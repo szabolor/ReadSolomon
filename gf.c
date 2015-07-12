@@ -50,8 +50,16 @@ void GF_precompute_tables(GF_PARAMS* params) {
   //debug("n: %d", params->n);
 
   params->alpha_by_num = (uint16_t*) malloc(params->n * sizeof(uint16_t));
+  if (params->alpha_by_num == NULL) {
+    error("Failed to allocate memory for params->alpha_by_num!\nExiting...");
+    exit(MEM_ERROR);
+  }
   params->num_by_alpha = (uint16_t*) malloc(params->n * sizeof(uint16_t));
-  
+  if (params->num_by_alpha == NULL) {
+    error("Failed to allocate memory for params->num_by_alpha!\nExiting...");
+    exit(MEM_ERROR);
+  }
+
   params->num_by_alpha[0] = 1;
   //for (i = 1; (!(i && params->m)); ++i) {
   for (i = 1; i < params->n; ++i) {
