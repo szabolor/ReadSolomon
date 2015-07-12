@@ -58,11 +58,29 @@ void test_3() {
   printf(" --- end test --- \n\n");
 }
 
+void test_4() {
+  printf(" --- test 4 --- \n> Division over GF(2^4)\n");
+
+  GF_PARAMS* params;
+  params = malloc(sizeof(GF_PARAMS));
+  params->m = 4;
+  params->t = 2;
+  params->generator = 0;
+  GF_init(params);
+
+  assert( GF_div(13, 8, params) == 7); printf("Passed!\n");
+  assert( GF_div(14, 1, params) == 14); printf("Passed!\n");
+  assert( GF_div(0, 10, params) == 0); printf("Passed!\n");
+
+  printf(" --- end test --- \n\n");
+}
+
 int main(int argc, char const *argv[]) {
   
   test_1();
   test_2();
   test_3();
+  test_4();
 
   return 0;
 }

@@ -96,6 +96,9 @@ uint16_t GF_add(uint16_t x, uint16_t y) {
 uint16_t GF_mul(uint16_t x, uint16_t y, GF_PARAMS* params) {
   uint16_t num = 0;
 
+  assert( x < params->n && x >= 0 );
+  assert( y < params->n && y >= 0 );
+
   if (!(x && y)) {
     return 0;
   }
@@ -103,5 +106,36 @@ uint16_t GF_mul(uint16_t x, uint16_t y, GF_PARAMS* params) {
   if (num > params->n) {
     num -= params->n;
   }
+  return params->num_by_alpha[num];
+}
+
+/*
+  GF_div: return `x / y` over GF(2^m)
+*/
+uint16_t GF_div(uint16_t x, uint16_t y, GF_PARAMS* params) {
+  uint16_t num = 0;
+
+  assert( x < params->n && x >= 0 );
+  assert( y < params->n && y >= 0 );
+
+  if (!y) {
+    error("Division by zero!\nExiting...");
+    exit(GENERAL_ERROR);
+  }
+
+  if (x == 0) {
+    return 0;
+  }
+
+  if (y == 1) {
+    return x;
+  }
+
+  if (params->alpha_by_num[x - 1] >= params->alpha_by_num[y - 1]) {
+    num = params->alpha_by_num[x - 1] - params->alpha_by_num[y - 1];
+  } else {
+    num = params->n + params->alpha_by_num[y - 1] - params->alpha_by_num[x - 1];
+  }
+
   return params->num_by_alpha[num];
 }
