@@ -96,14 +96,17 @@ uint16_t GF_add(uint16_t x, uint16_t y) {
 uint16_t GF_mul(uint16_t x, uint16_t y, GF_PARAMS* params) {
   uint16_t num = 0;
 
-  assert( x < params->n && x >= 0 );
-  assert( y < params->n && y >= 0 );
+  assert( x <= params->n );
+  assert( x >= 0 );
+  assert( y <= params->n );
+  assert( y >= 0 );
 
   if (!(x && y)) {
     return 0;
   }
+  
   num = params->alpha_by_num[x - 1] + params->alpha_by_num[y - 1];
-  if (num > params->n) {
+  if (num >= params->n) {
     num -= params->n;
   }
   return params->num_by_alpha[num];
@@ -115,8 +118,10 @@ uint16_t GF_mul(uint16_t x, uint16_t y, GF_PARAMS* params) {
 uint16_t GF_div(uint16_t x, uint16_t y, GF_PARAMS* params) {
   uint16_t num = 0;
 
-  assert( x < params->n && x >= 0 );
-  assert( y < params->n && y >= 0 );
+  assert( x <= params->n );
+  assert( x >= 0 );
+  assert( y <= params->n );
+  assert( y >= 0 );
 
   if (!y) {
     error("Division by zero!\nExiting...");
@@ -131,10 +136,15 @@ uint16_t GF_div(uint16_t x, uint16_t y, GF_PARAMS* params) {
     return x;
   }
 
+ /* printf("GF_div(%d, %d)\n", x, y);
+  printf("x: %d -> alpha_by_num=%d\n",x,params->alpha_by_num[x-1]);
+  printf("y: %d -> alpha_by_num=%d\n",y,params->alpha_by_num[y-1]); */
   if (params->alpha_by_num[x - 1] >= params->alpha_by_num[y - 1]) {
     num = params->alpha_by_num[x - 1] - params->alpha_by_num[y - 1];
+    //printf("if1: num=%d\n", num);
   } else {
     num = params->n + params->alpha_by_num[y - 1] - params->alpha_by_num[x - 1];
+    //printf("if2: num=%d\n", num);
   }
 
   return params->num_by_alpha[num];

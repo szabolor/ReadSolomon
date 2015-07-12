@@ -54,6 +54,7 @@ void test_3() {
   assert( GF_mul(7, 8, params) == 13); printf("Passed!\n");
   assert( GF_mul(14, 1, params) == 14); printf("Passed!\n");
   assert( GF_mul(0, 10, params) == 0); printf("Passed!\n");
+  assert( GF_mul(10, 12, params) == 1); printf("Passed!\n");
 
   printf(" --- end test --- \n\n");
 }
